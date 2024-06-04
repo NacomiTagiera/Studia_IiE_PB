@@ -9,7 +9,10 @@
 </head>
 
 <body>
-  <h1 class="heading">Plan lekcji</h1>
+  <header>
+    <h1 class="heading">Plan lekcji</h1>
+    <button id="resetujPlan">Resetuj</button>
+  </header>
   <table>
     <tr>
       <th>Godzina</th>
@@ -135,7 +138,7 @@
         <input type="number" id="ilosc" required min="1" max="15">
         <label for="preferowanyDzien">Preferowany dzień</label>
         <select id="preferowanyDzien">
-          <option value="0">Brak preferencji</option>
+          <option value="0" selected>Brak preferencji</option>
           <option value="1">Poniedziałek</option>
           <option value="2">Wtorek</option>
           <option value="3">Środa</option>
@@ -147,7 +150,7 @@
     </div>
 
     <div class="subjects">
-      <h2 class="heading">Lista przedmiotów</h2>
+      <h2 class="heading">Przedmioty do wprowadzenia</h2>
       <div id="dodanePrzedmioty" class="added-subjects"></div>
     </div>
   </div>
@@ -175,7 +178,7 @@
       Piątek
     </label>
 
-    <button type="submit" id="wpiszPrzedmioty">Utwórz plan</button>
+    <button id="wpiszPrzedmioty">Utwórz plan</button>
   </div>
 
   <script src="script.js"></script>
