@@ -1,1 +1,1 @@
-# Studia_IiE-PB
+Repozytorium zawiera rozwiązania zadań i projekty napisane podczas studiów na kierunku Informatyka i Ekonometria na Politechnice Białostockiej.
