@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { Autocomplete, Card, Stack, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DateField } from '@mui/x-date-pickers/DateField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
@@ -77,7 +77,7 @@ export const OperationForm = () => {
 				<Stack component="form" onSubmit={handleSubmit} justifyContent="center" spacing={4} px={4}>
 					<TextField name="operation-name" label="Nazwa operacji" required />
 					<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-						<DatePicker name="operation-date" label="Data" />
+						<DateField name="operation-date" label="Data" />
 					</LocalizationProvider>
 					<TextField
 						name="operation-number"
