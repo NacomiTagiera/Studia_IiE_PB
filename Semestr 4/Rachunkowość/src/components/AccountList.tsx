@@ -18,8 +18,6 @@ export const AccountList = () => {
 	const accounts = useAccountingStore((state) => state.accounts);
 	const operations = useAccountingStore((state) => state.operations);
 
-	console.table(operations);
-
 	return (
 		<Grid container spacing={2}>
 			{accounts.map((account) => (

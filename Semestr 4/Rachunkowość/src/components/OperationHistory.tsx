@@ -1,38 +1,48 @@
 'use client';
 
 import {
+	Card,
+	CardContent,
 	Container,
-	Typography,
 	Table,
 	TableBody,
 	TableCell,
 	TableHead,
 	TableRow,
-	Card,
-	CardContent,
 } from '@mui/material';
+
 import { useAccountingStore } from '@/store/useAccountingStore';
+import { Header } from './Header';
 
 export const OperationHistory = () => {
 	const operations = useAccountingStore((state) => state.operations);
 
 	return (
 		<Container>
-			<Typography variant="h4" gutterBottom>
-				Historia wszystkich operacji
-			</Typography>
+			<Header>Historia wszystkich operacji</Header>
 			<Card>
 				<CardContent>
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>Nazwa operacji</TableCell>
-								<TableCell>Data</TableCell>
-								<TableCell>Numer</TableCell>
-								<TableCell>Kwota</TableCell>
-								<TableCell>Typ operacji</TableCell>
-								<TableCell>Z konta</TableCell>
-								<TableCell>Na konto</TableCell>
+								<TableCell align="center" sx={{ fontWeight: 600 }}>
+									Nazwa operacji
+								</TableCell>
+								<TableCell align="center" sx={{ fontWeight: 600 }}>
+									Data
+								</TableCell>
+								<TableCell align="center" sx={{ fontWeight: 600 }}>
+									Numer
+								</TableCell>
+								<TableCell align="center" sx={{ fontWeight: 600 }}>
+									Kwota
+								</TableCell>
+								<TableCell align="center" sx={{ fontWeight: 600 }}>
+									Z konta
+								</TableCell>
+								<TableCell align="center" sx={{ fontWeight: 600 }}>
+									Na konto
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -40,13 +50,12 @@ export const OperationHistory = () => {
 								.filter((operaion) => operaion.number !== 'Sp')
 								.map((operation, index) => (
 									<TableRow key={index}>
-										<TableCell>{operation.name}</TableCell>
-										<TableCell>{operation.date}</TableCell>
-										<TableCell>{operation.number}</TableCell>
-										<TableCell>{operation.amount}</TableCell>
-										<TableCell>{operation.type}</TableCell>
-										<TableCell>{operation.fromAccount}</TableCell>
-										<TableCell>{operation.toAccount}</TableCell>
+										<TableCell align="center">{operation.name}</TableCell>
+										<TableCell align="center">{operation.date}</TableCell>
+										<TableCell align="center">{operation.number}</TableCell>
+										<TableCell align="center">{operation.amount}</TableCell>
+										<TableCell align="center">{operation.fromAccount}</TableCell>
+										<TableCell align="center">{operation.toAccount}</TableCell>
 									</TableRow>
 								))}
 						</TableBody>

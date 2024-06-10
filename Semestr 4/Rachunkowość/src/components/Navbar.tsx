@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { slugify } from '@/utils';
 
-const pages = ['Dodaj operacje', 'Salda poczatkowe', 'Historia', 'Bilans'] as const;
+const pages = ['Dodaj operacje', 'Historia', 'Bilans'] as const;
 
 export const Navbar = () => {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);

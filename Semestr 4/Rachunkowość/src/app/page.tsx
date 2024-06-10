@@ -1,13 +1,26 @@
-import { Typography } from '@mui/material';
+import NextLink from 'next/link';
+import { Button, Stack } from '@mui/material';
 
 import { AccountList } from '@/components/AccountList';
+import { Header } from '@/components/Header';
 
 export default function Home() {
 	return (
 		<>
-			<Typography variant="h3" component="h2" gutterBottom align="center">
-				Lista kont
-			</Typography>
+			<Stack
+				component="header"
+				direction="row"
+				justifyContent="space-between"
+				alignItems="center"
+				marginBlockEnd={4}
+			>
+				<Header>Lista kont</Header>
+				<NextLink href="/salda-poczatkowe" passHref>
+					<Button variant="contained" size="large">
+						Salda początkowe
+					</Button>
+				</NextLink>
+			</Stack>
 			<AccountList />
 		</>
 	);

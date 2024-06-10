@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Autocomplete, Button, Card, Stack, TextField, Typography } from '@mui/material';
+import { Autocomplete, Card, Stack, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,7 +12,9 @@ import 'dayjs/locale/pl';
 import { useAccountingStore } from '@/store/useAccountingStore';
 import { Operation, OperationType } from '@/types';
 
+import { Header } from './Header';
 import { Notification } from './Notification';
+import { SubmitButton } from './SubmitButton';
 
 export const OperationForm = () => {
 	const addOperation = useAccountingStore((state) => state.addOperation);
@@ -33,6 +35,7 @@ export const OperationForm = () => {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
+		const form = e.target as HTMLFormElement;
 		const formData = new FormData(e.target as HTMLFormElement);
 		const operation: Operation = {
 			name: formData.get('operation-name') as string,
@@ -48,12 +51,16 @@ export const OperationForm = () => {
 
 		addOperation(operation);
 		updateAccounts(operation);
+		setNotificationOpen(true);
+		form.reset();
 	};
 
 	const getAccountOptions = (type: OperationType) => {
 		switch (type.toLowerCase()) {
 			case 'aktywna':
-				return accounts.filter((account) => account.type === 'debit');
+				return accounts.filter(
+					(account) => account.name.includes('Umorzenie') || account.type === 'debit',
+				);
 			case 'pasywna':
 				return accounts.filter((account) => account.type === 'credit');
 			case 'aktywno-pasywna':
@@ -65,11 +72,9 @@ export const OperationForm = () => {
 
 	return (
 		<>
-			<Card variant="outlined" sx={{ py: 4 }}>
-				<Typography component="h1" variant="h3" gutterBottom align="center">
-					Dodaj Operację
-				</Typography>
-				<Stack component="form" onSubmit={handleSubmit} justifyContent="center" spacing={4} p={6}>
+			<Header>Dodaj operację</Header>
+			<Card variant="outlined" sx={{ py: 4, maxWidth: 'md', mx: 'auto' }}>
+				<Stack component="form" onSubmit={handleSubmit} justifyContent="center" spacing={4} px={4}>
 					<TextField name="operation-name" label="Nazwa operacji" required />
 					<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
 						<DatePicker name="operation-date" label="Data" />
@@ -127,9 +132,7 @@ export const OperationForm = () => {
 						renderInput={(params) => <TextField {...params} label="Strona" name="to-side" />}
 					/>
 
-					<Button type="submit" variant="contained">
-						Dodaj operację
-					</Button>
+					<SubmitButton>Dodaj operację</SubmitButton>
 				</Stack>
 			</Card>
 			<Notification
