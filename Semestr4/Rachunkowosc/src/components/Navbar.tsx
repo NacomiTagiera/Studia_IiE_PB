@@ -34,22 +34,23 @@ export const Navbar = () => {
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
 					<MonetizationOnIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-					<Typography
-						component={NextLink}
-						href="/"
-						variant="h6"
-						noWrap
-						sx={{
-							mr: 2,
-							display: { xs: 'none', md: 'flex' },
-							fontWeight: 700,
-							letterSpacing: '.3rem',
-							color: 'inherit',
-							textDecoration: 'none',
-						}}
-					>
-						RACHUNKOWOŚĆ
-					</Typography>
+					<NextLink href="/">
+						<Typography
+							variant="h6"
+							component="h1"
+							noWrap
+							sx={{
+								mr: 2,
+								display: { xs: 'none', md: 'flex' },
+								fontWeight: 700,
+								letterSpacing: '.3rem',
+								color: 'inherit',
+								textDecoration: 'none',
+							}}
+						>
+							RACHUNKOWOŚĆ
+						</Typography>
+					</NextLink>
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
@@ -95,24 +96,25 @@ export const Navbar = () => {
 						</Menu>
 					</Box>
 					<MonetizationOnIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-					<Typography
-						variant="h5"
-						noWrap
-						component={NextLink}
-						href="/"
-						sx={{
-							mr: 2,
-							display: { xs: 'flex', md: 'none' },
-							flexGrow: 1,
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
-							color: 'inherit',
-							textDecoration: 'none',
-						}}
-					>
-						RACHUNKOWOŚĆ
-					</Typography>
+					<NextLink href="/">
+						<Typography
+							variant="h5"
+							component="h1"
+							noWrap
+							sx={{
+								mr: 2,
+								display: { xs: 'flex', md: 'none' },
+								flexGrow: 1,
+								fontFamily: 'monospace',
+								fontWeight: 700,
+								letterSpacing: '.3rem',
+								color: 'inherit',
+								textDecoration: 'none',
+							}}
+						>
+							RACHUNKOWOŚĆ
+						</Typography>
+					</NextLink>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 						{pages.map((page) => (
 							<NextLink key={page} href={`/${slugify(page)}`} passHref>

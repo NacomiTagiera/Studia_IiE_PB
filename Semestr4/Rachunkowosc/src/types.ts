@@ -12,7 +12,7 @@ export interface Account {
 export interface Operation {
 	name: string;
 	date: string;
-	number: number | 'Sp';
+	operationNumber: number | 'Sp';
 	amount: number;
 	type: OperationType;
 	fromAccount: string;
@@ -20,3 +20,5 @@ export interface Operation {
 	fromSide: AccountType;
 	toSide: AccountType;
 }
+
+export type NotificationType = 'success' | 'error';

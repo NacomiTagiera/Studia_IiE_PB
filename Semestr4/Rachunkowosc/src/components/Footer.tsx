@@ -14,7 +14,7 @@ export const Footer = () => (
 		<Container maxWidth="sm">
 			<Typography variant="body2" color="text.secondary" align="center">
 				{'Copyright © '}
-				<Link color="inherit" href="https://github.com/NacomiTagiera">
+				<Link color="inherit" href="https://github.com/NacomiTagiera" target="_blank">
 					Rachunkowość Komputerowa
 				</Link>{' '}
 				{new Date().getFullYear()}

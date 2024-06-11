@@ -47,7 +47,7 @@ export const AccountList = () => {
 												)
 												.map((operation, index) => (
 													<TableRow key={index}>
-														<TableCell align="center">{operation.number}</TableCell>
+														<TableCell align="center">{operation.operationNumber}</TableCell>
 														<TableCell align="center">{operation.amount}</TableCell>
 													</TableRow>
 												))}
@@ -74,7 +74,7 @@ export const AccountList = () => {
 												.map((operation, index) => (
 													<TableRow key={index}>
 														<TableCell align="center">{operation.amount}</TableCell>
-														<TableCell align="center">{operation.number}</TableCell>
+														<TableCell align="center">{operation.operationNumber}</TableCell>
 													</TableRow>
 												))}
 										</TableBody>

@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 
-import { Autocomplete, Card, Stack, TextField } from '@mui/material';
+import { Autocomplete, Box, Card, Grid, Stack, TextField } from '@mui/material';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import 'dayjs/locale/pl';
 
+import { useNotification } from '@/hooks/useNotification';
 import { useAccountingStore } from '@/store/useAccountingStore';
 import { Operation, OperationType } from '@/types';
 
@@ -20,16 +21,30 @@ export const OperationForm = () => {
 	const addOperation = useAccountingStore((state) => state.addOperation);
 	const updateAccounts = useAccountingStore((state) => state.updateAccounts);
 	const accounts = useAccountingStore((state) => state.accounts) || [];
+	const operations = useAccountingStore((state) => state.operations) || [];
 
 	const [operationType, setOperationType] = useState<OperationType>('aktywna');
-	const [notificationOpen, setNotificationOpen] = useState(false);
+	const {
+		notificationOpen,
+		notificationMessage,
+		status,
+		showNotification,
+		handleCloseNotification,
+	} = useNotification();
 
-	const handleCloseNotification = (_e: React.SyntheticEvent | Event, reason?: string) => {
-		if (reason === 'clickaway') {
-			return;
+	const validateOperation = (operation: Operation) => {
+		if (operation.fromSide === operation.toSide) {
+			return 'Operacja nie może być zaksięgowana na dwóch kontach po tej samej stronie';
 		}
 
-		setNotificationOpen(false);
+		if (
+			Number(operation.operationNumber) <= 0 ||
+			operations.some((op) => op.operationNumber === operation.operationNumber)
+		) {
+			return 'Numer operacji musi być większy od 0 i być unikalny.';
+		}
+
+		return null;
 	};
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -40,7 +55,7 @@ export const OperationForm = () => {
 		const operation: Operation = {
 			name: formData.get('operation-name') as string,
 			date: formData.get('operation-date') as string,
-			number: formData.get('operation-number') as unknown as number,
+			operationNumber: formData.get('operation-number') as unknown as number,
 			amount: parseFloat(formData.get('amount') as string),
 			type: formData.get('operation-type')?.toString().toLowerCase() as OperationType,
 			fromAccount: formData.get('from-account') as string,
@@ -49,9 +64,15 @@ export const OperationForm = () => {
 			toSide: formData.get('to-side') === 'Debetowa' ? 'debit' : 'credit',
 		};
 
+		const errorMessage = validateOperation(operation);
+		if (errorMessage) {
+			showNotification(errorMessage, 'error');
+			return;
+		}
+
 		addOperation(operation);
 		updateAccounts(operation);
-		setNotificationOpen(true);
+		showNotification('Operacja dodana pomyślnie', 'success');
 		form.reset();
 	};
 
@@ -74,30 +95,51 @@ export const OperationForm = () => {
 		<>
 			<Header>Dodaj operację</Header>
 			<Card variant="outlined" sx={{ py: 4, maxWidth: 'md', mx: 'auto' }}>
-				<Stack component="form" onSubmit={handleSubmit} justifyContent="center" spacing={4} px={4}>
-					<TextField name="operation-name" label="Nazwa operacji" required />
-					<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-						<DateField name="operation-date" label="Data" />
-					</LocalizationProvider>
-					<TextField
-						name="operation-number"
-						label="Numer operacji"
-						inputProps={{
-							type: 'number',
-							min: 1,
-							max: 9999,
-						}}
-						required
-					/>
-					<TextField
-						name="amount"
-						label="Kwota"
-						inputProps={{
-							type: 'number',
-							step: 1,
-						}}
-						required
-					/>
+				<Stack
+					component="form"
+					justifyContent="center"
+					alignItems="center"
+					spacing={4}
+					px={4}
+					onSubmit={handleSubmit}
+				>
+					<Box>
+						<Grid container rowSpacing={4} columnSpacing={2}>
+							<Grid item xs={12} sm={6}>
+								<TextField name="operation-name" label="Nazwa operacji" required fullWidth />
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
+									<DateField name="operation-date" label="Data" fullWidth required />
+								</LocalizationProvider>
+							</Grid>
+							<Grid item xs={6}>
+								<TextField
+									name="operation-number"
+									label="Numer operacji"
+									inputProps={{
+										type: 'number',
+										min: 1,
+										max: 9999,
+									}}
+									required
+									fullWidth
+								/>
+							</Grid>
+							<Grid item xs={6}>
+								<TextField
+									name="amount"
+									label="Kwota"
+									inputProps={{
+										type: 'number',
+										step: 1,
+									}}
+									required
+									fullWidth
+								/>
+							</Grid>
+						</Grid>
+					</Box>
 					<Autocomplete
 						disablePortal
 						id="operation-type"
@@ -106,30 +148,35 @@ export const OperationForm = () => {
 						renderInput={(params) => (
 							<TextField {...params} label="Typ operacji" name="operation-type" />
 						)}
+						fullWidth
 					/>
 					<Autocomplete
 						disablePortal
 						id="from-account"
 						options={getAccountOptions(operationType).map((account) => account.name)}
 						renderInput={(params) => <TextField {...params} label="Z konta" name="from-account" />}
+						fullWidth
 					/>
 					<Autocomplete
 						disablePortal
 						id="from-side"
 						options={['Debetowa', 'Kredytowa']}
 						renderInput={(params) => <TextField {...params} label="Strona" name="from-side" />}
+						fullWidth
 					/>
 					<Autocomplete
 						disablePortal
 						id="to-account"
 						options={getAccountOptions(operationType).map((account) => account.name)}
 						renderInput={(params) => <TextField {...params} label="Na konto" name="to-account" />}
+						fullWidth
 					/>
 					<Autocomplete
 						disablePortal
 						id="to-side"
 						options={['Debetowa', 'Kredytowa']}
 						renderInput={(params) => <TextField {...params} label="Strona" name="to-side" />}
+						fullWidth
 					/>
 
 					<SubmitButton>Dodaj operację</SubmitButton>
@@ -137,7 +184,8 @@ export const OperationForm = () => {
 			</Card>
 			<Notification
 				open={notificationOpen}
-				message="Operacja dodana pomyślnie"
+				message={notificationMessage}
+				severity={status}
 				onClose={handleCloseNotification}
 			/>
 		</>
