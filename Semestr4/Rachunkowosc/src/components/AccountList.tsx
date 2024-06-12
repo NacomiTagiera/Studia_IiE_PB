@@ -10,15 +10,22 @@ import {
 	TableCell,
 	TableHead,
 	TableRow,
+	Box,
+	Button,
 } from '@mui/material';
 
 import { useAccountingStore } from '@/store/useAccountingStore';
+import { clearLocalStorage } from '@/utils';
 
 export const AccountList = () => {
 	const accounts = useAccountingStore((state) => state.accounts);
 	const operations = useAccountingStore((state) => state.operations);
 
 	return (
+		<>
+			<Box textAlign='right' pb={4}>
+				<Button variant='contained' onClick={() => clearLocalStorage()}>Wyczyść</Button>
+			</Box>
 		<Grid container spacing={2}>
 			{accounts.map((account) => (
 				<Grid item xs={12} md={6} key={account.name}>
@@ -85,6 +92,7 @@ export const AccountList = () => {
 					</Card>
 				</Grid>
 			))}
-		</Grid>
+			</Grid>
+			</>
 	);
 };

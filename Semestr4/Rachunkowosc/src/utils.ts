@@ -11,6 +11,13 @@ export const loadFromLocalStorage = (key: string) => {
 	return storedValue ? JSON.parse(storedValue) : null;
 };
 
+	export const clearLocalStorage = () => {
+		if (typeof window === 'undefined') return;
+
+		localStorage.clear();
+		window.location.reload();
+	};
+
 export const slugify = (text: string) =>
 	text
 		.toLowerCase()
