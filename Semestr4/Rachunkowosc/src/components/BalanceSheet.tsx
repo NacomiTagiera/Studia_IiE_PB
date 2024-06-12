@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-
 import {
 	Grid,
 	Card,
@@ -13,7 +12,8 @@ import {
 	TableRow,
 	Stack,
 } from '@mui/material';
-import { DateField, LocalizationProvider } from '@mui/x-date-pickers';
+import { DateField } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import dayjs, { Dayjs } from 'dayjs';
@@ -46,21 +46,29 @@ export const BalanceSheet = () => {
 		return account ? account.balance : 0;
 	};
 
-	const assetsSum = balances.reduce((acc, balance) => {
-		if (balance.type === 'debit') {
-			return acc + balance.balance;
-		}
+	const assetsSum =
+		balances.reduce((acc, balance) => {
+			if (balance.type === 'debit') {
+				return acc + balance.balance;
+			}
+			return acc;
+		}, 0) -
+		getBalanceForAccount('Umorzenie środków transportu') -
+		getBalanceForAccount('Umorzenie urządzeń technicznych i maszyn') -
+		getBalanceForAccount('Amortyzacja');
 
-		return acc;
-	}, 0);
+	const liabilitiesSum =
+		balances.reduce((acc, balance) => {
+			if (balance.type === 'credit') {
+				return acc + balance.balance;
+			}
+			return acc;
+		}, 0) -
+		getBalanceForAccount('Umorzenie środków transportu') -
+		getBalanceForAccount('Umorzenie urządzeń technicznych i maszyn');
 
-	const liabilitiesSum = balances.reduce((acc, balance) => {
-		if (balance.type === 'credit') {
-			return acc + balance.balance;
-		}
-
-		return acc;
-	}, 0);
+	const profitOrLossAdjustment = assetsSum - liabilitiesSum;
+	const adjustedProfitOrLoss = getBalanceForAccount('Zysk (strata) netto') + profitOrLossAdjustment;
 
 	return (
 		<>
@@ -72,16 +80,18 @@ export const BalanceSheet = () => {
 				paddingBlock={4}
 				onSubmit={handleSubmit}
 			>
-				<Typography fontWeight="600">Sporządzony na dzień:</Typography>
+				<Typography fontWeight="600">Sporządź bilans na dzień:</Typography>
 				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
 					<DateField
 						name="balance-date"
 						label="Data"
 						value={balanceDate}
 						onChange={(newValue) => setBalanceDate(newValue)}
+						format="DD.MM.YYYY"
+						required
 					/>
 				</LocalizationProvider>
-				<SubmitButton>Sporządź</SubmitButton>
+				<SubmitButton type="submit">Sporządź</SubmitButton>
 			</Stack>
 			<Grid container columnSpacing={2} rowSpacing={4}>
 				<Grid item xs={12} lg={6}>
@@ -102,7 +112,8 @@ export const BalanceSheet = () => {
 										<TableCell align="right">
 											{getBalanceForAccount('Urządzenia techniczne i maszyny') +
 												getBalanceForAccount('Środki transportu') -
-												getBalanceForAccount('Amortyzacja')}
+												getBalanceForAccount('Umorzenie środków transportu') -
+												getBalanceForAccount('Umorzenie urządzeń technicznych i maszyn')}
 										</TableCell>
 									</TableRow>
 									<TableRow>
@@ -114,7 +125,8 @@ export const BalanceSheet = () => {
 										<TableCell align="right">
 											{getBalanceForAccount('Urządzenia techniczne i maszyny') +
 												getBalanceForAccount('Środki transportu') -
-												getBalanceForAccount('Amortyzacja')}
+												getBalanceForAccount('Umorzenie środków transportu') -
+												getBalanceForAccount('Umorzenie urządzeń technicznych i maszyn')}
 										</TableCell>
 									</TableRow>
 									<TableRow>
@@ -180,9 +192,7 @@ export const BalanceSheet = () => {
 										<TableCell>
 											<strong>Aktywa razem</strong>
 										</TableCell>
-										<TableCell align="right">
-											{assetsSum - getBalanceForAccount('Amortyzacja')}
-										</TableCell>
+										<TableCell align="right">{assetsSum}</TableCell>
 									</TableRow>
 								</TableBody>
 							</Table>
@@ -205,8 +215,7 @@ export const BalanceSheet = () => {
 											<strong>A. Kapitał własny</strong>
 										</TableCell>
 										<TableCell align="right">
-											{getBalanceForAccount('Kapitał podstawowy') +
-												getBalanceForAccount('Zysk (strata) netto')}
+											{getBalanceForAccount('Kapitał podstawowy') + adjustedProfitOrLoss}
 										</TableCell>
 									</TableRow>
 									<TableRow>
@@ -233,9 +242,7 @@ export const BalanceSheet = () => {
 									</TableRow>
 									<TableRow>
 										<TableCell>VI Zysk (strata) netto</TableCell>
-										<TableCell align="right">
-											{getBalanceForAccount('Zysk (strata) netto')}
-										</TableCell>
+										<TableCell align="right">{adjustedProfitOrLoss}</TableCell>
 									</TableRow>
 									<TableRow>
 										<TableCell>VII Odpisy z zysku netto w ciągu roku obrotowego (-)</TableCell>
@@ -281,11 +288,7 @@ export const BalanceSheet = () => {
 										<TableCell>
 											<strong>Pasywa razem</strong>
 										</TableCell>
-										<TableCell align="right">
-											{liabilitiesSum -
-												getBalanceForAccount('Umorzenie środków transportu') -
-												getBalanceForAccount('Umorzenie urządzeń technicznych i maszyn')}
-										</TableCell>
+										<TableCell align="right">{liabilitiesSum + profitOrLossAdjustment}</TableCell>
 									</TableRow>
 								</TableBody>
 							</Table>

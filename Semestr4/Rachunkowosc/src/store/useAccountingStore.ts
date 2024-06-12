@@ -95,8 +95,8 @@ export const useAccountingStore = create<StoreState>((set, get) => ({
 				operationNumber: 'Sp',
 				amount: credit > 0 ? credit : debit,
 				type: 'initial-balance',
-				fromAccount: name,
-				fromSide: credit > 0 ? 'credit' : 'debit',
+				fromAccount: 'Saldo początkowe',
+				fromSide: null,
 				toAccount: name,
 				toSide: credit > 0 ? 'credit' : 'debit',
 			};
@@ -124,26 +124,28 @@ export const useAccountingStore = create<StoreState>((set, get) => ({
 			const operationDate = new Date(operation.date);
 			const comparisonDate = new Date(date);
 
-			if (operationDate <= comparisonDate) {
-				return;
-			}
+			if (operationDate <= comparisonDate) return;
 
 			const fromAccount = accountsCopy.find((account) => account.name === operation.fromAccount);
 			const toAccount = accountsCopy.find((account) => account.name === operation.toAccount);
 
-			if (operation.type === 'initial-balance') {
-				const account = accountsCopy.find((account) => account.name === operation.fromAccount);
-
-				if (account) {
-					account.balance -= operation.amount;
-					return;
-				}
+			if (operation.type === 'initial-balance' && toAccount) {
+				toAccount.balance -= operation.amount;
+				return;
 			}
 
 			if (fromAccount && toAccount) {
-				fromAccount.balance += operation.amount;
-				toAccount.balance -= operation.amount;
-				return;
+				if (fromAccount.type === 'debit') {
+					fromAccount.balance += operation.amount;
+				} else {
+					fromAccount.balance -= operation.amount;
+				}
+
+				if (toAccount.type === 'debit') {
+					toAccount.balance -= operation.amount;
+				} else {
+					toAccount.balance += operation.amount;
+				}
 			}
 		});
 

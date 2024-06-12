@@ -15,9 +15,9 @@ export interface Operation {
 	operationNumber: number | 'Sp';
 	amount: number;
 	type: OperationType;
-	fromAccount: string;
+	fromAccount: string | 'Saldo początkowe';
 	toAccount: string;
-	fromSide: AccountType;
+	fromSide: AccountType | null;
 	toSide: AccountType;
 }
 
