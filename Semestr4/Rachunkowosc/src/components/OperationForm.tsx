@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Autocomplete, Box, Card, Grid, Stack, TextField } from '@mui/material';
+import { Autocomplete, Grid, Stack, TextField } from '@mui/material';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -13,7 +13,6 @@ import { useNotification } from '@/hooks/useNotification';
 import { useAccountingStore } from '@/store/useAccountingStore';
 import { Operation, OperationType } from '@/types';
 
-import { Header } from './Header';
 import { Notification } from './Notification';
 import { SubmitButton } from './SubmitButton';
 
@@ -37,11 +36,24 @@ export const OperationForm = () => {
 			return 'Operacja nie może być zaksięgowana na dwóch kontach po tej samej stronie';
 		}
 
+		if (operation.fromAccount === operation.toAccount) {
+			return 'Konto źródłowe i docelowe nie mogą być takie same';
+		}
+
 		if (
 			Number(operation.operationNumber) <= 0 ||
 			operations.some((op) => op.operationNumber === operation.operationNumber)
 		) {
 			return 'Numer operacji musi być większy od 0 i być unikalny.';
+		}
+
+		const fromAccount = accounts.find((account) => account.name === operation.fromAccount);
+		if (
+			fromAccount &&
+			((operation.fromSide === 'debit' && fromAccount.debit < operation.amount) ||
+				(operation.fromSide === 'credit' && fromAccount.credit < operation.amount))
+		) {
+			return 'Konto źródłowe nie ma wystarczających środków';
 		}
 
 		return null;
@@ -93,95 +105,90 @@ export const OperationForm = () => {
 
 	return (
 		<>
-			<Header>Dodaj operację</Header>
-			<Card variant="outlined" sx={{ py: 4, maxWidth: 'md', mx: 'auto' }}>
-				<Stack
-					component="form"
-					justifyContent="center"
-					alignItems="center"
-					spacing={4}
-					px={4}
-					onSubmit={handleSubmit}
-				>
-					<Box>
-						<Grid container rowSpacing={4} columnSpacing={2}>
-							<Grid item xs={12} sm={6}>
-								<TextField name="operation-name" label="Nazwa operacji" required fullWidth />
-							</Grid>
-							<Grid item xs={12} sm={6}>
-								<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-									<DateField name="operation-date" label="Data" fullWidth required />
-								</LocalizationProvider>
-							</Grid>
-							<Grid item xs={6}>
-								<TextField
-									name="operation-number"
-									label="Numer operacji"
-									inputProps={{
-										type: 'number',
-										min: 1,
-										max: 9999,
-									}}
-									required
-									fullWidth
-								/>
-							</Grid>
-							<Grid item xs={6}>
-								<TextField
-									name="amount"
-									label="Kwota"
-									inputProps={{
-										type: 'number',
-										step: 1,
-									}}
-									required
-									fullWidth
-								/>
-							</Grid>
-						</Grid>
-					</Box>
-					<Autocomplete
-						disablePortal
-						id="operation-type"
-						options={['Aktywna', 'Pasywna', 'Aktywno-pasywna']}
-						onChange={(_e, value) => setOperationType(value as OperationType)}
-						renderInput={(params) => (
-							<TextField {...params} label="Typ operacji" name="operation-type" />
-						)}
-						fullWidth
-					/>
-					<Autocomplete
-						disablePortal
-						id="from-account"
-						options={getAccountOptions(operationType).map((account) => account.name)}
-						renderInput={(params) => <TextField {...params} label="Z konta" name="from-account" />}
-						fullWidth
-					/>
-					<Autocomplete
-						disablePortal
-						id="from-side"
-						options={['Debetowa', 'Kredytowa']}
-						renderInput={(params) => <TextField {...params} label="Strona" name="from-side" />}
-						fullWidth
-					/>
-					<Autocomplete
-						disablePortal
-						id="to-account"
-						options={getAccountOptions(operationType).map((account) => account.name)}
-						renderInput={(params) => <TextField {...params} label="Na konto" name="to-account" />}
-						fullWidth
-					/>
-					<Autocomplete
-						disablePortal
-						id="to-side"
-						options={['Debetowa', 'Kredytowa']}
-						renderInput={(params) => <TextField {...params} label="Strona" name="to-side" />}
-						fullWidth
-					/>
+			<Stack
+				component="form"
+				justifyContent="center"
+				alignItems="center"
+				spacing={4}
+				px={4}
+				onSubmit={handleSubmit}
+			>
+				<Grid container rowSpacing={4} columnSpacing={2}>
+					<Grid item xs={12} sm={6} pt="0 !important" pl="9 !important">
+						<TextField name="operation-name" label="Nazwa operacji" required fullWidth />
+					</Grid>
+					<Grid item xs={12} sm={6} pt="0 !important">
+						<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
+							<DateField name="operation-date" label="Data" fullWidth required />
+						</LocalizationProvider>
+					</Grid>
+					<Grid item xs={12} sm={6} pl="9 !important">
+						<TextField
+							name="operation-number"
+							label="Numer operacji"
+							inputProps={{
+								type: 'number',
+								min: 1,
+								max: 9999,
+							}}
+							required
+							fullWidth
+						/>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField
+							name="amount"
+							label="Kwota"
+							inputProps={{
+								type: 'number',
+								step: 1,
+							}}
+							required
+							fullWidth
+						/>
+					</Grid>
+				</Grid>
+				<Autocomplete
+					disablePortal
+					id="operation-type"
+					options={['Aktywna', 'Pasywna', 'Aktywno-pasywna']}
+					onChange={(_e, value) => setOperationType(value as OperationType)}
+					renderInput={(params) => (
+						<TextField {...params} label="Typ operacji" name="operation-type" />
+					)}
+					fullWidth
+				/>
+				<Autocomplete
+					disablePortal
+					id="from-account"
+					options={getAccountOptions(operationType).map((account) => account.name)}
+					renderInput={(params) => <TextField {...params} label="Z konta" name="from-account" />}
+					fullWidth
+				/>
+				<Autocomplete
+					disablePortal
+					id="from-side"
+					options={['Debetowa', 'Kredytowa']}
+					renderInput={(params) => <TextField {...params} label="Strona" name="from-side" />}
+					fullWidth
+				/>
+				<Autocomplete
+					disablePortal
+					id="to-account"
+					options={getAccountOptions(operationType).map((account) => account.name)}
+					renderInput={(params) => <TextField {...params} label="Na konto" name="to-account" />}
+					fullWidth
+				/>
+				<Autocomplete
+					disablePortal
+					id="to-side"
+					options={['Debetowa', 'Kredytowa']}
+					renderInput={(params) => <TextField {...params} label="Strona" name="to-side" />}
+					fullWidth
+				/>
 
-					<SubmitButton>Dodaj operację</SubmitButton>
-				</Stack>
-			</Card>
+				<SubmitButton>Dodaj operację</SubmitButton>
+			</Stack>
 			<Notification
 				open={notificationOpen}
 				message={notificationMessage}

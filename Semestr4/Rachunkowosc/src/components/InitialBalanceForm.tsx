@@ -2,12 +2,11 @@
 
 import { useState } from 'react';
 
-import { Autocomplete, Card, CardContent, Stack, TextField } from '@mui/material';
+import { Autocomplete, Stack, TextField } from '@mui/material';
 
 import { useAccountingStore } from '@/store/useAccountingStore';
 import { Account } from '@/types';
 
-import { Header } from './Header';
 import { Notification } from './Notification';
 import { SubmitButton } from './SubmitButton';
 import { useNotification } from '@/hooks/useNotification';
@@ -65,47 +64,42 @@ export const InitialBalanceForm = () => {
 
 	return (
 		<>
-			<Header>Ustaw saldo początkowe</Header>
-			<Card variant="outlined" sx={{ maxWidth: 'md', mx: 'auto' }}>
-				<CardContent>
-					<Stack
-						component="form"
-						alignItems="center"
-						justifyContent="center"
-						spacing={4}
-						px={2}
-						py={1}
-						onSubmit={handleSubmit}
-					>
-						<Autocomplete
-							disablePortal
-							id="account-name"
-							options={accounts.map((account) => account.name)}
-							value={selectedAccount?.name || ''}
-							onChange={(_e, value) =>
-								setSelectedAccount(accounts.find((account) => account.name === value) || null)
-							}
-							renderInput={(params) => (
-								<TextField {...params} label="Wybierz konto" name="account-name" />
-							)}
-							fullWidth
-						/>
-						<TextField
-							label="Saldo początkowe"
-							inputProps={{
-								type: 'number',
-								step: 1,
-							}}
-							value={amount}
-							onChange={(e) => setAmount(e.target.value === '' ? '' : Number(e.target.value))}
-							required
-							fullWidth
-						/>
+			<Stack
+				component="form"
+				alignItems="center"
+				justifyContent="center"
+				spacing={4}
+				px={2}
+				py={1}
+				onSubmit={handleSubmit}
+			>
+				<Autocomplete
+					disablePortal
+					id="account-name"
+					options={accounts.map((account) => account.name)}
+					value={selectedAccount?.name || ''}
+					onChange={(_e, value) =>
+						setSelectedAccount(accounts.find((account) => account.name === value) || null)
+					}
+					renderInput={(params) => (
+						<TextField {...params} label="Wybierz konto" name="account-name" />
+					)}
+					fullWidth
+				/>
+				<TextField
+					label="Saldo początkowe"
+					inputProps={{
+						type: 'number',
+						step: 1,
+					}}
+					value={amount}
+					onChange={(e) => setAmount(e.target.value === '' ? '' : Number(e.target.value))}
+					required
+					fullWidth
+				/>
 
-						<SubmitButton>Ustaw saldo</SubmitButton>
-					</Stack>
-				</CardContent>
-			</Card>
+				<SubmitButton>Ustaw saldo</SubmitButton>
+			</Stack>
 			<Notification
 				open={notificationOpen}
 				message={notificationMessage}

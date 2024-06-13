@@ -91,7 +91,7 @@ export const useAccountingStore = create<StoreState>((set, get) => ({
 
 			const newOperation: Operation = {
 				name: 'Saldo początkowe',
-				date: new Date().toLocaleDateString('en-GB').replace(/\//g, '.') || '01.01.1900',
+				date: '10.06.2024',
 				operationNumber: 'Sp',
 				amount: credit > 0 ? credit : debit,
 				type: 'initial-balance',

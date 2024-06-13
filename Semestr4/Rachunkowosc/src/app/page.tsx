@@ -14,7 +14,9 @@ export default function Home() {
 				alignItems="center"
 				marginBlockEnd={4}
 			>
-				<Header pb={0} mb={0}>Lista kont</Header>
+				<Header pb={0} mb={0}>
+					Lista kont
+				</Header>
 				<NextLink href="/salda-poczatkowe" passHref>
 					<Button variant="contained" size="large">
 						Salda początkowe

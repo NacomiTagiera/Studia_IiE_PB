@@ -48,7 +48,7 @@ export const Navbar = () => {
 								textDecoration: 'none',
 							}}
 						>
-							RACHUNKOWOŚĆ
+							RACHUNKOWIEC
 						</Typography>
 					</NextLink>
 
@@ -112,7 +112,7 @@ export const Navbar = () => {
 								textDecoration: 'none',
 							}}
 						>
-							RACHUNKOWOŚĆ
+							RACHUNKOWIEC
 						</Typography>
 					</NextLink>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
