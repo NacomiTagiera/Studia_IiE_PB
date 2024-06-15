@@ -1,6 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Projekt z Rachunkowości Komputerowej
 
-## Getting Started
+Live demo: [projekt-rk-iie.vercel.app](https://projekt-rk-iie.vercel.app/)
+
+Technologie: Next.js, TypeScript, Zustand, Material UI.
+
+Zadanie: dodawanie operacji gospodarczych na kilkunastu kontach księgowych wraz z informacjami o:
+
+- dacie operacji,
+- kwocie,
+- numerze operacji gospodarczej.
+
+### Getting Started
 
 First, run the development server:
 
