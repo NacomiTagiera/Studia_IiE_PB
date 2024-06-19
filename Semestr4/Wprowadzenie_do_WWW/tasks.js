@@ -10,6 +10,7 @@ let editingTaskId = null;
 const fetchTasks = async () => {
 	const response = await fetch(apiUrl);
 	const tasks = await response.json();
+
 	renderTasks(tasks);
 };
 
@@ -39,6 +40,7 @@ const editTask = async (id) => {
 	editingTaskId = id;
 	const response = await fetch(`${apiUrl}/${id}`);
 	const task = await response.json();
+
 	document.getElementById('edit-task-name').value = task.name;
 	document.getElementById('edit-task-priority').value = task.priority;
 	document.getElementById('edit-dialog').showModal();
@@ -79,12 +81,22 @@ const renderTasks = (tasks) => {
 		li.className = `task ${task.priority} ${task.completed ? 'completed' : ''}`;
 		li.innerHTML = `
             <span>${task.name}</span>
-            <div>
-                <button onclick="toggleComplete(${task.id}, ${!task.completed})">${
-			task.completed ? 'Oznacz jako niezrobione' : 'Oznacz jako zrobione'
-		}</button>
-                <button onclick="editTask(${task.id})">Edytuj</button>
-                <button onclick="deleteTask(${task.id})">Usuń</button>
+            <div class='task-actions'>
+                <button class='task-action-btn task-check-btn' aria-label="${
+									task.completed ? 'Undo task' : 'Complete task'
+								}" onclick="toggleComplete(${task.id}, ${!task.completed})">
+                    <i class="${task.completed ? 'fas fa-undo' : 'fas fa-check'}"></i>
+                </button>
+                <button class='task-action-btn task-edit-btn' aria-label="Edit task" onclick="editTask(${
+									task.id
+								})">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class='task-action-btn task-delete-btn' aria-label="Delete task" onclick="deleteTask(${
+									task.id
+								})">
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
         `;
 

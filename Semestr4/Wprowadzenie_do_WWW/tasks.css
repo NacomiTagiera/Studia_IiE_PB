@@ -1,0 +1,188 @@
+#todo {
+	padding: 5rem 0;
+}
+
+.todo-container {
+	width: min(80%, 800px);
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	margin-top: 5rem;
+}
+
+.controls {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+
+.control-btn {
+	background-color: #fff;
+	font-weight: 500;
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s;
+}
+
+.control-btn:hover {
+	background-color: #f0f0f0;
+}
+
+#task-form,
+#edit-form {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	width: min(45rem, 95%);
+	margin-inline: auto;
+}
+
+#edit-form {
+	width: 100%;
+}
+
+#task-name,
+#task-priority,
+#edit-task-name,
+#edit-task-priority {
+	padding: 10px 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.submit-btn {
+	background-color: #e0e0e0;
+	font-weight: 600;
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+	background-color: #d0d0d0;
+}
+
+#task-list {
+	list-style: none;
+	padding: 0;
+	margin-block: 3rem;
+}
+
+.task {
+	background-color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid #fff;
+	border-radius: 5px;
+	font-size: 2rem;
+	margin-bottom: 1rem;
+}
+
+.task.low {
+	color: #0aef1e;
+}
+.task.medium {
+	color: #ff7f50;
+}
+.task.high {
+	color: #ef140a;
+}
+
+.task.completed {
+	text-decoration: line-through;
+	opacity: 0.9;
+}
+
+.task-actions {
+	display: flex;
+	gap: 0.7rem;
+}
+
+.task-action-btn {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: max(1.5rem, 13px);
+	transition: opacity 0.3s;
+	padding: 0.5rem;
+}
+
+.task-action-btn:hover {
+	opacity: 0.8;
+}
+
+.task-check-btn {
+	color: #0aef1e;
+}
+.task-edit-btn {
+	color: rgb(0, 166, 187);
+}
+.task-delete-btn {
+	color: #ef140a;
+}
+
+#edit-dialog {
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid #a79a2d;
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: min(45rem, 100%);
+	transform: translate(-50%, -50%);
+}
+
+#edit-dialog::backdrop {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dialog-title {
+	font-size: 2.5rem;
+	font-weight: 600;
+	margin-bottom: 1.5rem;
+	text-align: center;
+}
+
+.dialog-actions {
+	align-self: flex-end;
+	display: flex;
+	gap: 1rem;
+}
+
+.dialog-btn {
+	background-color: #ef140a;
+	color: #fff;
+	font-weight: 600;
+	padding: 1rem 2rem;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	transition: opacity 0.3s;
+}
+
+.dialog-btn[type='submit'] {
+	background-color: #0aef1e;
+}
+
+.dialog-btn:hover {
+	opacity: 0.9;
+}
+
+@media (max-width: 500px) {
+	.controls {
+		flex-direction: column;
+		gap: 1rem;
+	}
+}

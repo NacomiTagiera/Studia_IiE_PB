@@ -1,0 +1,107 @@
+#faq {
+	min-height: 100dvh;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10rem 0;
+}
+
+#faq-heading {
+	margin-bottom: 2rem;
+}
+
+.faq {
+	background-color: lightblue;
+	border: 0.1rem solid #9fa4a8;
+	border-radius: 1rem;
+	margin: 2rem 0;
+	padding: 3rem;
+	position: relative;
+	overflow: hidden;
+	transition: 0.3s ease;
+	width: 50%;
+}
+
+.faq[open] {
+	background-color: lightblue;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.faq[open]::before,
+.faq[open]::after {
+	content: '\f075';
+	font-family: 'Font Awesome 5 Free';
+	color: #2ecc71;
+	font-size: 7rem;
+	position: absolute;
+	opacity: 0.2;
+	top: -1rem;
+	right: -1rem;
+	z-index: 0;
+}
+
+.faq[open]::before {
+	color: #3498db;
+	top: 2rem;
+	right: 2rem;
+	transform: rotateY(180deg);
+}
+
+.faq-title {
+	font-size: 3rem;
+	font-weight: 700;
+}
+
+.faq-title::marker {
+	color: #3498db;
+	font-size: 3rem;
+	position: absolute;
+	top: 2rem;
+	left: 2rem;
+	z-index: 1;
+}
+
+.faq-text {
+	margin-top: 3rem;
+	font-size: 2rem;
+}
+
+@media (max-width: 1400px) {
+	.faq {
+		width: 60%;
+	}
+}
+
+@media (max-width: 1000px) {
+	.faq {
+		width: 70%;
+	}
+}
+
+@media (max-width: 900px) {
+	.faq {
+		width: 80%;
+	}
+}
+
+@media (max-width: 700px) {
+	.faq {
+		width: 87%;
+	}
+}
+
+@media (max-width: 550px) {
+	#faq {
+		min-height: 75%;
+	}
+
+	.faq {
+		width: 95%;
+		margin: 4rem 0;
+	}
+
+	#faq-heading {
+		margin-bottom: 4rem;
+	}
+}

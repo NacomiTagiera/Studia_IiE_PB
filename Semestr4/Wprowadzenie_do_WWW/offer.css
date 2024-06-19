@@ -1,0 +1,93 @@
+#offer {
+	background: rgb(0, 166, 187);
+	background: radial-gradient(circle, rgba(0, 166, 187, 1) 20%, rgba(0, 212, 255, 1) 83%);
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 10rem 0;
+}
+
+.cards-container {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.card {
+	background-color: #a79a2d;
+	width: 30rem;
+	padding: 4rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	text-align: center;
+	box-shadow: 1rem 1rem 1rem #000;
+	position: relative;
+	transform: rotateY(20deg) skewX(-2deg);
+	transition: all 0.3s ease-in-out;
+	top: -4rem;
+}
+
+.card:hover {
+	transform: rotateY(20deg) skewX(-2deg) translateY(-3rem);
+	box-shadow: 2rem 2rem 2rem #000;
+}
+
+.card::before {
+	content: '';
+	height: 100%;
+	width: 1rem;
+	background-color: #817824;
+	position: absolute;
+	top: 0;
+	left: -1rem;
+	transform: skewY(45deg);
+	transform-origin: right;
+	box-shadow: -0.1rem -0.1rem 0.1rem #000;
+}
+
+.card::after {
+	content: '';
+	height: 1rem;
+	width: 100%;
+	background-color: #8f8317;
+	position: absolute;
+	top: -1rem;
+	left: 0;
+	transform: skewX(45deg);
+	transform-origin: bottom;
+	box-shadow: -0.1rem -0.1rem 0.1rem #000;
+}
+
+.card-name {
+	font-size: 3rem;
+	font-weight: 900;
+	text-transform: uppercase;
+	letter-spacing: 0.5rem;
+	color: #111;
+	margin: 2rem 0;
+	text-shadow: 0.15rem 0.15rem 0.15rem #000;
+}
+
+@media (max-width: 1400px) {
+	#offer {
+		height: auto;
+		padding: 10rem 0 12rem 0;
+	}
+
+	.cards-container {
+		margin-top: 10rem;
+	}
+}
+
+@media (max-width: 1000px) {
+	.cards-container {
+		flex-wrap: wrap;
+	}
+
+	.card {
+		margin: 5rem;
+	}
+}

@@ -1,0 +1,130 @@
+#gallery {
+	padding: 5rem 0;
+}
+
+.gallery {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-evenly;
+	margin-top: 10rem;
+}
+
+.gallery-link {
+	position: relative;
+	margin: 4rem 1rem;
+}
+
+.gallery-link::before {
+	content: '';
+	position: absolute;
+	top: 2vw;
+	left: 80%;
+	width: 0.2rem;
+	height: 0;
+	background-color: white;
+	z-index: 10;
+	transition: height 0.5s linear;
+}
+
+.gallery-link:hover::before {
+	height: 80%;
+}
+
+.gallery-link:hover::after {
+	width: 90%;
+}
+
+.gallery-link::after {
+	content: '';
+	position: absolute;
+	top: 30%;
+	left: 2rem;
+	width: 0;
+	height: 0.2rem;
+	background-color: white;
+	transition: width 0.5s linear;
+}
+
+.gallery-img {
+	width: 24vw;
+	height: 15vw;
+	object-fit: cover;
+	box-shadow: 0.3rem 0.3rem 0.1rem red, 0.5rem 0.5rem 0.1rem orangered, 0.7rem 0.7rem 0.1rem orange,
+		0.9rem 0.9rem 0.1rem yellow;
+	transition: all 0.5s;
+}
+
+.gallery-link:hover .gallery-img {
+	box-shadow: 1rem 1rem 0.1rem red, 2rem 2rem 0.1rem orangered, 3rem 3rem 0.1rem orange,
+		4rem 4rem 0.1rem yellow;
+	transition: all 0.5s;
+	filter: blur(0.5rem);
+	opacity: 0.5;
+	transform: scale(1.1);
+}
+
+.gallery-name {
+	position: absolute;
+	top: 3rem;
+	left: 3rem;
+	font-size: 2rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.1rem;
+	color: white;
+	width: 0;
+	overflow: hidden;
+	transition: width 0.3s;
+}
+
+.gallery-link:hover .gallery-name {
+	width: 100%;
+	transition: width 1.5s 0.5s;
+}
+
+.gallery-description {
+	position: absolute;
+	top: 34%;
+	left: 2rem;
+	width: 70%;
+	font-size: 1.8rem;
+	font-weight: 300;
+	letter-spacing: 0.1rem;
+	text-transform: uppercase;
+	color: white;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s;
+}
+
+.gallery-link:hover .gallery-description {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 1s 1s;
+}
+
+@media (max-width: 1400px) {
+	.gallery-link {
+		width: 40rem;
+		height: 25rem;
+		margin: 5rem;
+	}
+
+	.gallery-img {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+@media (max-width: 700px) {
+	.gallery-description {
+		font-size: 1.5rem;
+	}
+}
+
+@media (max-width: 500px) {
+	.gallery-description {
+		font-size: 12px;
+	}
+}
