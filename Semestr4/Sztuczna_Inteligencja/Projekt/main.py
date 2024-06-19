@@ -117,17 +117,23 @@ def genetic_algorithm(population_size, generations):
     best_individual = max(population, key=fitness)
     return best_individual
 
-# Wyświetlenie planu zajęć w konsoli
-def display_schedule(schedule):
+# Funkcja zapisująca plan zajęć do pliku
+def display_schedule(schedule, filename=None):
     for klasa, plan in schedule.items():
-        print(f"\nPlan zajec dla klasy {klasa}:")
+        output = f"\nPlan zajec dla klasy {klasa}:\n"
         df = pd.DataFrame(columns=dni_tygodnia)
         for dzien in dni_tygodnia:
             zajecia = [f"{przedmiot} ({nauczyciel})" for przedmiot, nauczyciel in plan[dzien]]
             if not zajecia:
                 zajecia = ['Brak']
             df[dzien] = pd.Series(zajecia)
-        print(tabulate(df.fillna('Brak'), headers='keys', tablefmt='grid'))
+        output += tabulate(df.fillna('Brak'), headers='keys', tablefmt='grid') + "\n"
+
+        if filename:
+            with open(filename, 'a') as f:
+                f.write(output)
+        else:
+            print(output)
 
 # Parametry algorytmu genetycznego
 population_size = 200
@@ -137,4 +143,4 @@ generations = 200
 best_schedule = genetic_algorithm(population_size, generations)
 
 # Wyświetlenie najlepszego planu zajęć
-display_schedule(best_schedule)
+display_schedule(best_schedule, 'schedule.txt')
