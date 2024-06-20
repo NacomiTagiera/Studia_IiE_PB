@@ -173,18 +173,27 @@
         <div class="todo-container">
           <div class="controls">
             <button class="control-btn" onclick="sortTasks('alphabetical')">Sortuj alfabetycznie</button>
-            <button class="control-btn" onclick="sortTasks('status')">Sortuj według statusu</button>
+            <button class="control-btn" onclick="sortTasks('status')">Sortuj wg statusu</button>
+            <button class="control-btn" onclick="sortTasks('priority')">Sortuj wg priorytetu</button>
           </div>
           <form id="task-form">
-            <input type="text" id="task-name" aria-label="Nazwa zadania" placeholder="Nazwa zadania" required min="2"
-              max="50">
-            <select id="task-priority" aria-label="Priorytet zadania" required>
-              <option value="low">Niski priorytet</option>
-              <option value="medium">Średni priorytet</option>
-              <option value="high">Wysoki priorytet</option>
-            </select>
+            <div class="form-field">
+              <input type="text" id="task-name" aria-label="Nazwa zadania" aria-describedby="name-error"
+                placeholder="Nazwa zadania" required min="2" max="50">
+              <p id="name-error" class="error-msg"></p>
+            </div>
+            <div class="form-field">
+              <select id="task-priority" aria-label="Priorytet zadania" required>
+                <option value="none" disabled selected>Priorytet</option>
+                <option value="low">Niski priorytet</option>
+                <option value="medium">Średni priorytet</option>
+                <option value="high">Wysoki priorytet</option>
+              </select>
+              <p id="priority-error" class="error-msg"></p>
+            </div>
             <button type="submit" class="submit-btn">Dodaj zadanie</button>
           </form>
+          <p id="other-error" class="error-msg"></p>
           <ul id="task-list"></ul>
         </div>
       </section>
@@ -194,20 +203,28 @@
     <dialog id="edit-dialog">
       <h2 class="dialog-title">Edytuj zadanie</h2>
       <form id="edit-form">
-        <input type="text" id="edit-task-name" aria-label="Nazwa zadania" required min="2" max="50" autocomplete="off">
-        <select id="edit-task-priority" aria-label="Priorytet zadania" required>
-          <option value="low">Niski Priorytet</option>
-          <option value="medium">Średni Priorytet</option>
-          <option value="high">Wysoki Priorytet</option>
-        </select>
+        <div class="form-field">
+          <input type="text" id="edit-task-name" aria-label="Nazwa zadania" required min="2" max="50"
+            autocomplete="off">
+          <p id="edit-name-error" class="error-msg"></p>
+        </div>
+        <div class="form-field">
+          <select id="edit-task-priority" aria-label="Priorytet zadania" required>
+            <option value="low">Niski Priorytet</option>
+            <option value="medium">Średni Priorytet</option>
+            <option value="high">Wysoki Priorytet</option>
+          </select>
+          <p id="edit-priority-error" class="error-msg"></p>
+        </div>
         <div class="dialog-actions">
           <button type="submit" class="dialog-btn">Zapisz</button>
           <button class="dialog-btn" onclick="closeDialog()">Anuluj</button>
         </div>
       </form>
+      <p class="error-msg" id="edit-other-error"></p>
     </dialog>
 
-    <footer class="footer" id="contact">
+    <footer id="contact">
       <div>
         <h3 class="footer-heading"><em>na fali</em></h4>
           <p class="footer-paragraph">ul. Wymyślna 123</p>
@@ -216,7 +233,7 @@
       <div>
         <h3 class="footer-heading">kontakt</h3>
         <p class="footer-paragraph">Nr telefonu: 111 111 111</p>
-        <p class="footer-paragraph">E-mail: kubapawlak1051@wp.pl</p>
+        <p class="footer-paragraph">E-mail: na@fali.pl</p>
       </div>
     </footer>
   </div>

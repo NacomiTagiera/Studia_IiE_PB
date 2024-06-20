@@ -74,6 +74,11 @@
 }
 
 @media (max-width: 1000px) {
+	#faq {
+		min-height: auto;
+		padding: 5rem 0;
+	}
+
 	.faq {
 		width: 70%;
 	}
@@ -92,10 +97,6 @@
 }
 
 @media (max-width: 550px) {
-	#faq {
-		min-height: 75%;
-	}
-
 	.faq {
 		width: 95%;
 		margin: 4rem 0;
