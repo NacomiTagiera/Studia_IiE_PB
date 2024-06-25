@@ -1,10 +1,22 @@
 {
-  "tasks": [
-    {
-      "name": "Zjechać na zjeżdżalni",
-      "priority": "high",
-      "completed": true,
-      "id": 2
-    }
-  ]
+	"tasks": [
+		{
+			"id": 111,
+			"name": "Pójść do sauny parowej",
+			"priority": "medium",
+			"completed": true
+		},
+		{
+			"id": 112,
+			"name": "Przepłynąć 100 metrów",
+			"priority": "low",
+			"completed": false
+		},
+		{
+			"id": 113,
+			"name": "Zjechać ze zjeżdżalni",
+			"priority": "medium",
+			"completed": false
+		}
+	]
 }
