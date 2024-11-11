@@ -1,8 +1,12 @@
 <resources>
-  <string name="app_name">AndroidQuizApp</string>
+  <string name="app_name">Android-App-1</string>
   <string name="button_true">Prawda</string>
   <string name="button_false">Fałsz</string>
   <string name="button_next">Następne</string>
+  <string name="button_hint">Podpowiedź</string>
+  <string name="text_view_answer">Odpowiedź</string>
+  <string name="show_hint">Pokaż odpowiedź</string>
+  <string name="are_you_sure">Czy na pewno chcesz zobaczyć odpowiedź?</string>
 
   <string name="q_kosowo">Kosowo to najmłodsze państwo na świecie</string>
   <string name="q_jowisz">Jowisz jest trzecią planetą Układu Słonecznego</string>
@@ -15,6 +19,7 @@
 
   <string name="correct_answer">Odpowiedź prawidłowa</string>
   <string name="incorrect_answer">Odpowiedź nieprawidłowa</string>
+  <string name="answer_was_shown">Odpowiedź została już wyświetlona!</string>
   <string name="final_result_message">Wynik: %1$d poprawnych na %2$d odpowiedzi!</string>
   <string name="quiz_finished">Quiz zakończony!</string>
 </resources>

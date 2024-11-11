@@ -54,4 +54,11 @@
     android:layout_height="wrap_content"
     android:text="@string/button_next" />
 
+  <Button
+    android:id="@+id/prompt_button"
+    android:layout_width="215dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:text="@string/button_hint" />
+
 </LinearLayout>
