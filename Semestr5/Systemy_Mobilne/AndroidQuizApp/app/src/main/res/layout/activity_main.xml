@@ -1,19 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:backgroundTint="#FFFFFF"
+  android:backgroundTintMode="screen"
+  android:gravity="center"
+  android:orientation="vertical"
+  tools:context=".MainActivity">
+
+  <TextView
+    android:id="@+id/question_text_view"
+    android:layout_width="411dp"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:fontFamily="sans-serif-black"
+    android:padding="30dp"
+    android:textAlignment="center"
+    android:textSize="16sp" />
+
+  <LinearLayout
+    style="?android:attr/buttonBarStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="70dp"
+    android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+      android:id="@+id/true_button"
+      style="@style/Widget.AppCompat.Button.Colored"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="5dp"
+      android:layout_weight="1"
+      android:text="@string/button_true"
+      android:textAlignment="center" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+      android:id="@+id/false_button"
+      style="@style/Widget.AppCompat.Button.Colored"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="5dp"
+      android:layout_weight="1"
+      android:text="@string/button_false" />
+
+  </LinearLayout>
+
+  <Button
+    android:id="@+id/next_button"
+    android:layout_width="215dp"
+    android:layout_height="wrap_content"
+    android:text="@string/button_next" />
+
+</LinearLayout>

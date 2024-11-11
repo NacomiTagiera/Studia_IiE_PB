@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">AndroidQuizApp</string>
+  <string name="app_name">AndroidQuizApp</string>
+  <string name="button_true">Prawda</string>
+  <string name="button_false">Fałsz</string>
+  <string name="button_next">Następne</string>
+
+  <string name="q_kosowo">Kosowo to najmłodsze państwo na świecie</string>
+  <string name="q_jowisz">Jowisz jest trzecią planetą Układu Słonecznego</string>
+  <string name="q_krakow">Pierwszą stolicą Polski był Kraków</string>
+  <string name="q_java_js">Java i JavaScript to dwa różne języki programowania</string>
+  <string name="q_c_high_level">C nie jest wysokopoziomowym językiem programowania</string>
+  <string name="q_krol">Drugim królem Polski był Bolesław I Chrobry</string>
+  <string name="q_deuter">Deuter jest izotopem wodoru</string>
+  <string name="q_bialowieza">Białowieski PN jest położony tylko w jednym państwie - Polsce</string>
+
+  <string name="correct_answer">Odpowiedź prawidłowa</string>
+  <string name="incorrect_answer">Odpowiedź nieprawidłowa</string>
+  <string name="final_result_message">Wynik: %1$d poprawnych na %2$d odpowiedzi!</string>
+  <string name="quiz_finished">Quiz zakończony!</string>
 </resources>
