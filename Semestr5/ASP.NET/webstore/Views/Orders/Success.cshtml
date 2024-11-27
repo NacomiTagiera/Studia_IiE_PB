@@ -1,0 +1,37 @@
+﻿@model StoreWebApp.Models.Order
+
+@{
+	ViewData["Title"] = "Order Successful";
+}
+
+<div class="container mt-5 text-center">
+    <h1 class="display-4 text-success">Order Successful!</h1>
+    <p class="lead">Thank you for your order. Below are the details:</p>
+
+    <div class="card mt-4">
+        <div class="card-header bg-success text-white">
+            Order Summary
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Order #@Model.Id</h5>
+            <p><strong>Date:</strong> @Model.OrderDate.ToString("f")</p>
+
+            <h6>Products:</h6>
+            <ul class="list-group">
+                @foreach (var item in Model.OrderItems)
+                {
+                    <li class="list-group-item">
+                        <strong>@item.Product.Name</strong> (Quantity: @item.Quantity) - $@item.Product.Price
+                    </li>
+                }
+            </ul>
+
+            <p class="mt-4"><strong>Total:</strong> $@Model.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price)</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Home</a>
+        <a href="@Url.Action("UserOrders", "Orders", new { userId = Model.UserId })" class="btn btn-secondary">View Order History</a>
+    </div>
+</div>

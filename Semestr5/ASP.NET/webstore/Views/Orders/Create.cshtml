@@ -1,0 +1,80 @@
+@model List<StoreWebApp.Models.Product>
+
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Place Your Order</h1>
+
+    <form method="post" class="needs-validation" novalidate>
+        <div class="mb-4">
+            <h3>Personal Details</h3>
+            <div class="form-group mb-3">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" required minlength="2" maxlength="50" />
+                <div class="invalid-feedback">
+                    Please enter your first name.
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="lastName">Last Name:</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" required minlength="2" maxlength="50" />
+                <div class="invalid-feedback">
+                    Please enter your last name.
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required />
+                <div class="invalid-feedback">
+                    Please enter a valid email address.
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="address">Address:</label>
+                <textarea class="form-control" id="address" name="address" required minlength="5" maxlength="100" rows="3"></textarea>
+                <div class="invalid-feedback">
+                    Please provide your address.
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h3>Products</h3>
+            <div class="form-check">
+                @foreach (var product in Model)
+                {
+                    <div class="mb-2">
+                        <input class="form-check-input" type="checkbox" id="product-@product.Id" name="productIds" value="@product.Id" />
+                        <label class="form-check-label" for="product-@product.Id">
+							@product.Name - $@product.Price
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Submit Order</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

@@ -1,0 +1,45 @@
+﻿@model StoreWebApp.Models.User
+
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center">Order History</h1>
+    <p class="text-muted text-center">Here are all the orders you have placed:</p>
+
+    @if (!Model.Orders.Any())
+    {
+        <div class="alert alert-warning text-center mt-4">
+            <p>You have no past orders.</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var order in Model.Orders)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Order #@order.Id - @order.OrderDate.ToString("f")
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Order Details:</h5>
+                    <ul class="list-group mb-3">
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@item.Product.Name</strong> - @item.Product.Description
+                                </div>
+                                <span>
+                                    Quantity: @item.Quantity | Price: $@item.Product.Price
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                    <p class="fw-bold">Total: $@order.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price)</p>
+                </div>
+            </div>
+        }
+    }
+</div>
