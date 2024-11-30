@@ -24,13 +24,19 @@ namespace StoreWebApp.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+            {
+                return BadRequest("Product ID cannot be null.");
+            }
 
-            var product = await context.Products
+            var product = await _context.Products
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (product == null) return NotFound();
+            if (product == null)
+            {
+                return NotFound();
+            }
 
             return View(product);
         }
