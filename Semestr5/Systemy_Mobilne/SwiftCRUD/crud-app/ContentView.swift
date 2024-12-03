@@ -36,22 +36,24 @@ struct ContentView: View {
                             .font(.headline)
                     }
                     Spacer()
-                    Button(action: { presentUserDetails(for: user) }) {
-                        Image(systemName: "info.circle")
-                            .foregroundColor(.blue)
-                    }
-                    Button(action: { presentEditUserView(for: user) }) {
-                        Image(systemName: "pencil")
-                            .foregroundColor(.blue)
-                    }
-                    Button(action: { deleteUser(user: user) }) {
-                        Image(systemName: "trash")
-                            .foregroundColor(.red)
-                    }
+                    Image(systemName: "info.circle")
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            presentUserDetails(for: user)
+                        }
+                    Image(systemName: "pencil")
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            presentEditUserView(for: user)
+                        }
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                        .onTapGesture {
+                            deleteUser(user: user)
+                        }
                 }
             }
         }
-        .navigationTitle("Users")
         .toolbar {
             ToolbarItemGroup(placement: .bottomBar) {
                 Button(action: presentAddUserView) {
