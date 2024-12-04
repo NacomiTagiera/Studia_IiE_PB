@@ -1,18 +1,34 @@
-## Projekt z Rachunkowości Komputerowej
+# Accounting Management System
 
-Live demo: [projekt-rk-iie.vercel.app](https://projekt-rk-iie.vercel.app/)
+A web application for managing accounting operations and generating balance sheets. Live demo available at: [projekt-rk-iie.vercel.app](https://projekt-rk-iie.vercel.app/)
 
-Technologie: Next.js, TypeScript, Zustand, Material UI.
+## Features
 
-Zadanie: dodawanie operacji gospodarczych na kilkunastu kontach księgowych wraz z informacjami o:
+- Managing accounting operations across multiple accounts
+- Setting initial account balances
+- Recording transactions with:
+  - Transaction date
+  - Amount
+  - Operation number
+  - Source and destination accounts
+- Viewing account history with debit and credit sides
+- Generating balance sheets for any selected date
+- Real-time balance calculations
+- Data persistence using local storage
 
-- dacie operacji,
-- kwocie,
-- numerze operacji gospodarczej.
+## Technology Stack
 
-### Getting Started
+- **Frontend Framework**: Next.js 14
+- **Language**: TypeScript
+- **State Management**: Zustand
+- **UI Components**: Material UI
+- **Date Handling**: Day.js
+- **Deployment**: Vercel
 
-First, run the development server:
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
 
 ```bash
 npm run dev
