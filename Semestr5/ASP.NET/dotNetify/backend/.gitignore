@@ -1,0 +1,40 @@
+﻿# Ignore build outputs
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Visual Studio Code settings
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Packages
+*.nupkg
+*.snupkg
+packages/
+.vs/
+
+# Backup files
+*.bak
+*.swp
+
+# Database files
+*.mdf
+*.ldf
+
+# Rider-specific files
+.idea/
+
+# Docker files
+*.env
+.env.*
