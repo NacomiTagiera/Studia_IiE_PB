@@ -1,0 +1,318 @@
+<Window x:Class="WpfRestaurant.Views.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Rejestracja - Foodify" 
+        Height="750" 
+        Width="500"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="NoResize"
+        Background="#f8f9fa"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <!-- Konwerter widoczności -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        
+        <!-- Style dla TextBox -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#ced4da"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#80bdff"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="#80bdff"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style dla PasswordBox -->
+        <Style x:Key="ModernPasswordBox" TargetType="PasswordBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#ced4da"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#80bdff"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="#80bdff"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style dla Button -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#007bff"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#0056b3"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#004085"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#6c757d"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla Secondary Button -->
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#007bff"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#0056b3"/>
+                                <Setter Property="Background" Value="#f8f9fa"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla Label -->
+        <Style x:Key="FormLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Główny kontener -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled">
+            <Border Background="White" 
+                    CornerRadius="8" 
+                    Margin="40,30,40,30"
+                    Padding="40,30">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" 
+                                      Direction="270" 
+                                      ShadowDepth="2" 
+                                      Opacity="0.1" 
+                                      BlurRadius="10"/>
+                </Border.Effect>
+
+                <StackPanel>
+                    <!-- Header -->
+                    <StackPanel HorizontalAlignment="Center" Margin="0,0,0,30">
+                        <TextBlock Text="🍕" 
+                                   FontSize="32" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,10"/>
+                        <TextBlock Text="Dołącz do Foodify" 
+                                   FontSize="24" 
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Center"
+                                   Foreground="#212529"
+                                   Margin="0,0,0,5"/>
+                        <TextBlock Text="Stwórz swoje konto i zacznij zamawiać!" 
+                                   FontSize="14" 
+                                   HorizontalAlignment="Center"
+                                   Foreground="#6c757d"/>
+                    </StackPanel>
+
+                    <!-- Formularz rejestracji -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <!-- Imię -->
+                            <Label Content="Imię *" Style="{StaticResource FormLabel}"/>
+                            <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="White"
+                                     BorderBrush="#ced4da"
+                                     BorderThickness="1"
+                                     Padding="12,10"
+                                     FontSize="14"
+                                     Height="38"
+                                     Margin="0,0,0,15"/>
+
+                            <!-- Email -->
+                            <Label Content="Email *" Style="{StaticResource FormLabel}"/>
+                            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="White"
+                                     BorderBrush="#ced4da"
+                                     BorderThickness="1"
+                                     Padding="12,10"
+                                     FontSize="14"
+                                     Height="38"
+                                     Margin="0,0,0,15"/>
+
+                            <!-- Hasło -->
+                            <Label Content="Hasło *" Style="{StaticResource FormLabel}"/>
+                            <PasswordBox x:Name="PasswordBox"
+                                         Background="White"
+                                         BorderBrush="#ced4da"
+                                         BorderThickness="1"
+                                         Padding="12,10"
+                                         FontSize="14"
+                                         Height="38"
+                                         Margin="0,0,0,15"
+                                         PasswordChanged="PasswordBox_PasswordChanged"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <!-- Nazwisko -->
+                            <Label Content="Nazwisko *" Style="{StaticResource FormLabel}"/>
+                            <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="White"
+                                     BorderBrush="#ced4da"
+                                     BorderThickness="1"
+                                     Padding="12,10"
+                                     FontSize="14"
+                                     Height="38"
+                                     Margin="0,0,0,15"/>
+
+                            <!-- Telefon -->
+                            <Label Content="Telefon *" Style="{StaticResource FormLabel}"/>
+                            <TextBox Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="White"
+                                     BorderBrush="#ced4da"
+                                     BorderThickness="1"
+                                     Padding="12,10"
+                                     FontSize="14"
+                                     Height="38"
+                                     Margin="0,0,0,15"/>
+
+                            <!-- Potwierdzenie hasła -->
+                            <Label Content="Potwierdzenie hasła *" Style="{StaticResource FormLabel}"/>
+                            <PasswordBox x:Name="ConfirmPasswordBox"
+                                         Background="White"
+                                         BorderBrush="#ced4da"
+                                         BorderThickness="1"
+                                         Padding="12,10"
+                                         FontSize="14"
+                                         Height="38"
+                                         Margin="0,0,0,15"
+                                         PasswordChanged="ConfirmPasswordBox_PasswordChanged"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Adres (pełna szerokość) -->
+                    <Label Content="Adres dostawy *" Style="{StaticResource FormLabel}"/>
+                    <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
+                             Background="White"
+                             BorderBrush="#ced4da"
+                             BorderThickness="1"
+                             Padding="12,10"
+                             FontSize="14"
+                             Height="38"
+                             Margin="0,0,0,20"/>
+
+                    <!-- Komunikaty -->
+                    <TextBlock Text="{Binding ErrorMessage}" 
+                               Foreground="#dc3545" 
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               MinHeight="20"
+                               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="{Binding SuccessMessage}" 
+                               Foreground="#28a745" 
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               MinHeight="20"
+                               Margin="0,0,0,10"/>
+
+                    <!-- Loading indicator -->
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center"
+                                Margin="0,0,0,10"
+                                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <ProgressBar IsIndeterminate="True" 
+                                     Width="20" 
+                                     Height="20" 
+                                     Margin="0,0,10,0"/>
+                        <TextBlock Text="Rejestrowanie..." 
+                                   VerticalAlignment="Center"
+                                   Foreground="#6c757d"/>
+                    </StackPanel>
+
+                    <!-- Przyciski -->
+                    <Button Content="Zarejestruj się" 
+                            Command="{Binding RegisterCommand}"
+                            IsEnabled="{Binding IsRegisterEnabled}"
+                            Style="{StaticResource PrimaryButton}"
+                            Margin="0,10,0,20"/>
+
+                    <!-- Link do logowania -->
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center">
+                        <TextBlock Text="Masz już konto? " 
+                                   Foreground="#6c757d" 
+                                   FontSize="13"
+                                   VerticalAlignment="Center"/>
+                        <Button Content="Zaloguj się" 
+                                Command="{Binding ShowLoginCommand}"
+                                Style="{StaticResource SecondaryButton}"/>
+                    </StackPanel>
+
+                    <!-- Przyciski dodatkowe -->
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center"
+                                Margin="0,20,0,0">
+                        <Button Content="Wyczyść formularz" 
+                                Command="{Binding ClearFormCommand}"
+                                Style="{StaticResource SecondaryButton}"
+                                Margin="0,0,15,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</Window> 

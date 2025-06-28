@@ -1,0 +1,240 @@
+<Window x:Class="WpfRestaurant.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WpfRestaurant.ViewModels"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        Height="500"
+        Width="400"
+        MinHeight="450"
+        MinWidth="350"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        Background="#F8F9FA">
+
+    <Window.DataContext>
+        <vm:LoginViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <!-- Value converter for boolean to visibility -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
+        <!-- Styl dla głównych przycisków -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#007BFF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#0056B3"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#6C757D"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Styl dla przycisków drugorzędnych -->
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#007BFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#007BFF"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E3F2FD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Styl dla TextBox -->
+        <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CED4DA"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Padding="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#007BFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Styl dla PasswordBox -->
+        <Style x:Key="ModernPasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CED4DA"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Padding="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#007BFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#343A40" Padding="20,15">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="🍴" FontSize="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                <TextBlock Text="FOODIFY - LOGOWANIE" 
+                         FontSize="18" 
+                         FontWeight="Bold" 
+                         Foreground="White" 
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="40">
+            <StackPanel MaxWidth="300">
+                
+                <!-- Welcome text -->
+                <TextBlock Text="Zaloguj się do swojego konta" 
+                         FontSize="16" 
+                         Foreground="#495057" 
+                         HorizontalAlignment="Center" 
+                         Margin="0,0,0,30"/>
+
+                <!-- Email field -->
+                <TextBlock Text="Email:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" 
+                       Style="{StaticResource ModernTextBoxStyle}"
+                       Margin="0,0,0,15"/>
+
+                <!-- Password field -->
+                <TextBlock Text="Hasło:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <PasswordBox x:Name="PasswordBox"
+                           Style="{StaticResource ModernPasswordBoxStyle}"
+                           Margin="0,0,0,20"/>
+
+                <!-- Error message -->
+                <TextBlock Text="{Binding ErrorMessage}" 
+                         Foreground="#DC3545" 
+                         FontSize="12" 
+                         TextWrapping="Wrap"
+                         Margin="0,0,0,15">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ErrorMessage}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ErrorMessage}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <!-- Login button -->
+                <Button Content="🔐 Zaloguj się" 
+                      Style="{StaticResource PrimaryButtonStyle}"
+                      Command="{Binding LoginCommand}"
+                      IsEnabled="{Binding IsLoginEnabled}"
+                      Margin="0,0,0,20"/>
+
+                <!-- Loading indicator -->
+                <StackPanel Orientation="Horizontal" 
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,20"
+                          Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="⏳ Logowanie..." 
+                             FontSize="12" 
+                             Foreground="#6C757D"/>
+                </StackPanel>
+
+                <!-- Register link -->
+                <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Run Text="Nie masz konta? " Foreground="#6C757D"/>
+                    <Hyperlink Command="{Binding ShowRegisterCommand}">
+                        <Run Text="Zarejestruj się" Foreground="#007BFF"/>
+                    </Hyperlink>
+                </TextBlock>
+
+                <!-- Clear form button -->
+                <Button Content="Wyczyść formularz" 
+                      Style="{StaticResource SecondaryButtonStyle}"
+                      Command="{Binding ClearFormCommand}"
+                      Margin="0,20,0,0"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window> 

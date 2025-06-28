@@ -1,0 +1,856 @@
+<Window x:Class="WpfRestaurant.Views.AdminPanelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfRestaurant.Views"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        Height="800"
+        Width="1200"
+        MinHeight="600"
+        MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8F9FA">
+
+    <Window.Resources>
+        <!-- Value converters -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
+        
+        <!-- Animacje -->
+        <Storyboard x:Key="FadeInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                           From="0" To="1" Duration="0:0:0.4"/>
+        </Storyboard>
+        
+        <Storyboard x:Key="SlideInFromTopAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" 
+                           From="-20" To="0" Duration="0:0:0.5"
+                           AccelerationRatio="0.1" DecelerationRatio="0.8"/>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                           From="0" To="1" Duration="0:0:0.4"/>
+        </Storyboard>
+        
+        <!-- Styl dla głównych przycisków -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#007BFF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#0056B3"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#6C757D"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Styl dla przycisków akcji -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="3" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" 
+                                                           To="1.05" Duration="0:0:0.15"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" 
+                                                           To="1.05" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" 
+                                                           To="1.0" Duration="0:0:0.15"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" 
+                                                           To="1.0" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Styl dla pól formularza -->
+        <Style x:Key="FormTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CED4DA"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Padding="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#007BFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Styl dla ComboBox -->
+        <Style x:Key="FormComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="32"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#343A40" Padding="20,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="🔧" FontSize="18" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="PANEL ADMINISTRATORA" 
+                             FontSize="16" 
+                             FontWeight="Bold" 
+                             Foreground="White" 
+                             VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding AdminName, StringFormat=' - {0}'}" 
+                             FontSize="14" 
+                             Foreground="#ADB5BD" 
+                             VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" 
+                      Content="🚪 Wyloguj" 
+                      Style="{StaticResource ActionButtonStyle}"
+                      Background="#DC3545" 
+                      Foreground="White" 
+                      BorderBrush="#DC3545"
+                      Command="{Binding LogoutCommand}"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <TabControl Grid.Row="1" Margin="20" SelectedIndex="{Binding SelectedTabIndex}">
+            <TabControl.RenderTransform>
+                <TranslateTransform Y="0"/>
+            </TabControl.RenderTransform>
+            <TabControl.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource SlideInFromTopAnimation}"/>
+                </EventTrigger>
+            </TabControl.Triggers>
+            
+            <!-- Tab 1: Menu Management -->
+            <TabItem Header="📋 Zarządzanie menu">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left Panel - Menu Items List -->
+                    <Grid Grid.Column="0" Margin="0,0,10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Menu Items Header -->
+                        <Border Grid.Row="0" Background="White" BorderBrush="#DEE2E6" BorderThickness="1" Padding="15,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock Grid.Column="0" 
+                                         Text="📋 POZYCJE MENU" 
+                                         FontSize="14" 
+                                         FontWeight="Bold" 
+                                         Foreground="#495057"/>
+                                
+                                <Button Grid.Column="1" 
+                                      Content="🔄 Odśwież" 
+                                      Style="{StaticResource ActionButtonStyle}"
+                                      Background="#28A745" 
+                                      Foreground="White" 
+                                      BorderBrush="#28A745"
+                                      Command="{Binding LoadDataCommand}"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Menu Items DataGrid -->
+                        <DataGrid Grid.Row="1" 
+                                ItemsSource="{Binding MenuItems}"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                CanUserDeleteRows="False"
+                                CanUserReorderColumns="False"
+                                IsReadOnly="True"
+                                GridLinesVisibility="Horizontal"
+                                HeadersVisibility="Column"
+                                Background="White"
+                                BorderBrush="#DEE2E6"
+                                BorderThickness="1,0,1,1">
+                            
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}" Width="*" MinWidth="120"/>
+                                <DataGridTextColumn Header="Kategoria" Binding="{Binding Category.Name}" Width="100"/>
+                                <DataGridTextColumn Header="Cena" Binding="{Binding Price, StringFormat='${0:#,##0.00}'}" Width="80"/>
+                                <DataGridTextColumn Header="Status" Width="80">
+                                    <DataGridTextColumn.Binding>
+                                        <Binding Path="IsActive">
+                                            <Binding.Converter>
+                                                <local:BoolToStatusConverter/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Akcje" Width="200">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="✏️ Edytuj" 
+                                                      Style="{StaticResource ActionButtonStyle}"
+                                                      Background="#FFC107" 
+                                                      Foreground="Black" 
+                                                      BorderBrush="#FFC107"
+                                                      Command="{Binding DataContext.SelectMenuItemForEditCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      CommandParameter="{Binding}"/>
+                                                
+                                                <Button Style="{StaticResource ActionButtonStyle}"
+                                                      Background="#17A2B8" 
+                                                      Foreground="White" 
+                                                      BorderBrush="#17A2B8"
+                                                      Command="{Binding DataContext.ToggleMenuItemActiveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      CommandParameter="{Binding}">
+                                                    <Button.Content>
+                                                        <TextBlock>
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="🔓 Aktywuj"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                                            <Setter Property="Text" Value="🔒 Ukryj"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </Button.Content>
+                                                </Button>
+                                                
+                                                <Button Content="🗑️ Usuń" 
+                                                      Style="{StaticResource ActionButtonStyle}"
+                                                      Background="#DC3545" 
+                                                      Foreground="White" 
+                                                      BorderBrush="#DC3545"
+                                                      Command="{Binding DataContext.DeleteMenuItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <!-- Right Panel - Add/Edit Form -->
+                    <Border Grid.Column="1" Background="White" BorderBrush="#DEE2E6" BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Form Header -->
+                            <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="#DEE2E6" BorderThickness="0,0,0,1" Padding="15,10">
+                                <TextBlock FontSize="14" FontWeight="Bold" Foreground="#495057">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="➕ DODAJ NOWE DANIE"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                                    <Setter Property="Text" Value="✏️ EDYTUJ DANIE"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Border>
+
+                            <!-- Form Fields -->
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="15">
+                                <StackPanel>
+                                    <!-- Nazwa -->
+                                    <TextBlock Text="Nazwa dania *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding ItemName, UpdateSourceTrigger=PropertyChanged}" 
+                                           Style="{StaticResource FormTextBoxStyle}"
+                                           Margin="0,0,0,15"/>
+
+                                    <!-- Opis -->
+                                    <TextBlock Text="Opis" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding ItemDescription, UpdateSourceTrigger=PropertyChanged}" 
+                                           Style="{StaticResource FormTextBoxStyle}"
+                                           Height="60"
+                                           TextWrapping="Wrap"
+                                           AcceptsReturn="True"
+                                           VerticalScrollBarVisibility="Auto"
+                                           Margin="0,0,0,15"/>
+
+                                    <!-- Cena -->
+                                    <TextBlock Text="Cena (USD) *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding ItemPrice, UpdateSourceTrigger=PropertyChanged}" 
+                                           Style="{StaticResource FormTextBoxStyle}"
+                                           Margin="0,0,0,15"/>
+
+                                    <!-- Kategoria -->
+                                    <TextBlock Text="Kategoria *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <ComboBox ItemsSource="{Binding Categories}"
+                                            SelectedItem="{Binding SelectedCategory}"
+                                            DisplayMemberPath="Name"
+                                            Style="{StaticResource FormComboBoxStyle}"
+                                            Margin="0,0,0,15"/>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <!-- Form Actions -->
+                            <Border Grid.Row="2" Background="#F8F9FA" BorderBrush="#DEE2E6" BorderThickness="0,1,0,0" Padding="15,10">
+                                <StackPanel>
+                                    <!-- Add/Edit Button -->
+                                    <Button IsEnabled="{Binding IsFormValid}"
+                                          Margin="0,0,0,5">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                                                <Setter Property="Content" Value="➕ Dodaj danie"/>
+                                                <Setter Property="Command" Value="{Binding AddMenuItemCommand}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                                        <Setter Property="Content" Value="💾 Zapisz zmiany"/>
+                                                        <Setter Property="Command" Value="{Binding EditMenuItemCommand}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <!-- Clear Form Button -->
+                                    <Button Content="🧹 Wyczyść formularz" 
+                                          Style="{StaticResource ActionButtonStyle}"
+                                          Background="Transparent" 
+                                          Foreground="#6C757D" 
+                                          BorderBrush="#6C757D"
+                                          Command="{Binding ClearFormCommand}"/>
+
+                                    <!-- Loading indicator -->
+                                    <StackPanel Orientation="Horizontal" 
+                                              HorizontalAlignment="Center"
+                                              Margin="0,10,0,0"
+                                              Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <TextBlock Text="⏳ Przetwarzanie..." 
+                                                 FontSize="11" 
+                                                 Foreground="#6C757D"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 2: Category Management -->
+            <TabItem Header="📁 Zarządzanie kategoriami">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left Panel - Categories List -->
+                    <Grid Grid.Column="0" Margin="0,0,10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Categories Header -->
+                        <Border Grid.Row="0" Background="White" BorderBrush="#DEE2E6" BorderThickness="1" Padding="15,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock Grid.Column="0" 
+                                         Text="📁 KATEGORIE" 
+                                         FontSize="14" 
+                                         FontWeight="Bold" 
+                                         Foreground="#495057"/>
+                                
+                                <Button Grid.Column="1" 
+                                      Content="🔄 Odśwież" 
+                                      Style="{StaticResource ActionButtonStyle}"
+                                      Background="#28A745" 
+                                      Foreground="White" 
+                                      BorderBrush="#28A745"
+                                      Command="{Binding LoadDataCommand}"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Categories DataGrid -->
+                        <DataGrid Grid.Row="1" 
+                                ItemsSource="{Binding Categories}"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                CanUserDeleteRows="False"
+                                CanUserReorderColumns="False"
+                                IsReadOnly="True"
+                                GridLinesVisibility="Horizontal"
+                                HeadersVisibility="Column"
+                                Background="White"
+                                BorderBrush="#DEE2E6"
+                                BorderThickness="1,0,1,1">
+                            
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}" Width="*" MinWidth="120"/>
+                                <DataGridTextColumn Header="Opis" Binding="{Binding Description}" Width="*" MinWidth="150"/>
+                                <DataGridTextColumn Header="Data utworzenia" Binding="{Binding CreatedAt, StringFormat='dd.MM.yyyy HH:mm'}" Width="140"/>
+                                <DataGridTemplateColumn Header="Akcje" Width="180">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="✏️ Edytuj" 
+                                                      Style="{StaticResource ActionButtonStyle}"
+                                                      Background="#FFC107" 
+                                                      Foreground="Black" 
+                                                      BorderBrush="#FFC107"
+                                                      Command="{Binding DataContext.SelectCategoryForEditCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      CommandParameter="{Binding}"/>
+                                                
+                                                <Button Content="🗑️ Usuń" 
+                                                      Style="{StaticResource ActionButtonStyle}"
+                                                      Background="#DC3545" 
+                                                      Foreground="White" 
+                                                      BorderBrush="#DC3545"
+                                                      Command="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <!-- Right Panel - Add/Edit Category Form -->
+                    <Border Grid.Column="1" Background="White" BorderBrush="#DEE2E6" BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Form Header -->
+                            <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="#DEE2E6" BorderThickness="0,0,0,1" Padding="15,10">
+                                <TextBlock FontSize="14" FontWeight="Bold" Foreground="#495057">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="➕ DODAJ NOWĄ KATEGORIĘ"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsEditingCategory}" Value="True">
+                                                    <Setter Property="Text" Value="✏️ EDYTUJ KATEGORIĘ"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Border>
+
+                            <!-- Form Fields -->
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="15">
+                                <StackPanel>
+                                    <!-- Nazwa -->
+                                    <TextBlock Text="Nazwa kategorii *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
+                                           Style="{StaticResource FormTextBoxStyle}"
+                                           Margin="0,0,0,15"/>
+
+                                    <!-- Opis -->
+                                    <TextBlock Text="Opis" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding CategoryDescription, UpdateSourceTrigger=PropertyChanged}" 
+                                           Style="{StaticResource FormTextBoxStyle}"
+                                           Height="80"
+                                           TextWrapping="Wrap"
+                                           AcceptsReturn="True"
+                                           VerticalScrollBarVisibility="Auto"
+                                           Margin="0,0,0,15"/>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <!-- Form Actions -->
+                            <Border Grid.Row="2" Background="#F8F9FA" BorderBrush="#DEE2E6" BorderThickness="0,1,0,0" Padding="15,10">
+                                <StackPanel>
+                                    <!-- Add/Edit Button -->
+                                    <Button IsEnabled="{Binding IsCategoryFormValid}"
+                                          Margin="0,0,0,5">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                                                <Setter Property="Content" Value="➕ Dodaj kategorię"/>
+                                                <Setter Property="Command" Value="{Binding AddCategoryCommand}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditingCategory}" Value="True">
+                                                        <Setter Property="Content" Value="💾 Zapisz zmiany"/>
+                                                        <Setter Property="Command" Value="{Binding EditCategoryCommand}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <!-- Clear Form Button -->
+                                    <Button Content="🧹 Wyczyść formularz" 
+                                          Style="{StaticResource ActionButtonStyle}"
+                                          Background="Transparent" 
+                                          Foreground="#6C757D" 
+                                          BorderBrush="#6C757D"
+                                          Command="{Binding ClearCategoryFormCommand}"/>
+
+                                    <!-- Loading indicator -->
+                                    <StackPanel Orientation="Horizontal" 
+                                              HorizontalAlignment="Center"
+                                              Margin="0,10,0,0"
+                                              Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <TextBlock Text="⏳ Przetwarzanie..." 
+                                                 FontSize="11" 
+                                                 Foreground="#6C757D"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 3: Order Management -->
+            <TabItem Header="📦 Zarządzanie zamówieniami">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Statistics Panel -->
+                    <Border Grid.Row="0" Background="White" BorderBrush="#DEE2E6" BorderThickness="1" Padding="20" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Total Orders -->
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding TotalOrdersCount}" 
+                                           FontSize="24" 
+                                           FontWeight="Bold" 
+                                           Foreground="#6f42c1" 
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Zamówień łącznie" 
+                                           FontSize="11" 
+                                           Foreground="#6c757d" 
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Pending Orders -->
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding PendingOrdersCount}" 
+                                           FontSize="24" 
+                                           FontWeight="Bold" 
+                                           Foreground="#ffc107" 
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Przyjęte" 
+                                           FontSize="11" 
+                                           Foreground="#6c757d" 
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- In Progress Orders -->
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding InProgressOrdersCount}" 
+                                           FontSize="24" 
+                                           FontWeight="Bold" 
+                                           Foreground="#17a2b8" 
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="W przygotowaniu" 
+                                           FontSize="11" 
+                                           Foreground="#6c757d" 
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Completed Orders -->
+                            <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding CompletedOrdersCount}" 
+                                           FontSize="24" 
+                                           FontWeight="Bold" 
+                                           Foreground="#28a745" 
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Zrealizowane" 
+                                           FontSize="11" 
+                                           Foreground="#6c757d" 
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Total Revenue -->
+                            <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding TotalRevenue, StringFormat='${0:#,##0.00}'}" 
+                                           FontSize="24" 
+                                           FontWeight="Bold" 
+                                           Foreground="#28a745" 
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Przychód" 
+                                           FontSize="11" 
+                                           Foreground="#6c757d" 
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Orders Header -->
+                    <Border Grid.Row="1" Background="White" BorderBrush="#DEE2E6" BorderThickness="1" Padding="15,10" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Column="0" 
+                                     Text="📦 WSZYSTKIE ZAMÓWIENIA" 
+                                     FontSize="14" 
+                                     FontWeight="Bold" 
+                                     Foreground="#495057"/>
+                            
+                            <Button Grid.Column="1" 
+                                  Content="🔄 Odśwież" 
+                                  Style="{StaticResource ActionButtonStyle}"
+                                  Background="#28A745" 
+                                  Foreground="White" 
+                                  BorderBrush="#28A745"
+                                  Command="{Binding LoadOrdersCommand}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Orders DataGrid -->
+                    <DataGrid Grid.Row="2" 
+                            ItemsSource="{Binding AllOrders}"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            CanUserReorderColumns="False"
+                            IsReadOnly="True"
+                            GridLinesVisibility="Horizontal"
+                            HeadersVisibility="Column"
+                            Background="White"
+                            BorderBrush="#DEE2E6"
+                            BorderThickness="1">
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nr" Binding="{Binding Id}" Width="60"/>
+                            <DataGridTextColumn Header="Klient" Binding="{Binding CustomerName}" Width="120"/>
+                            <DataGridTextColumn Header="Data" Binding="{Binding OrderDateDisplay}" Width="120"/>
+                            
+                            <!-- Status Column with colored badges -->
+                            <DataGridTemplateColumn Header="Status" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="12" Padding="8,4" HorizontalAlignment="Center">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Przyjęte">
+                                                            <Setter Property="Background" Value="#ffc107"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="W przygotowaniu">
+                                                            <Setter Property="Background" Value="#17a2b8"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Zrealizowane">
+                                                            <Setter Property="Background" Value="#28a745"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding Status}" 
+                                                       Foreground="White" 
+                                                       FontSize="11" 
+                                                       FontWeight="SemiBold"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
+                            <DataGridTextColumn Header="Pozycje" Binding="{Binding ItemsCountDisplay}" Width="80"/>
+                            <DataGridTextColumn Header="Kwota" Binding="{Binding TotalAmountDisplay}" Width="100"/>
+                            <DataGridTextColumn Header="Realizacja" Binding="{Binding CompletedDateDisplay}" Width="120"/>
+                            
+                            <!-- Actions Column -->
+                            <DataGridTemplateColumn Header="Akcje" Width="450">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel>
+                                            <!-- View Details Button -->
+                                            <Button Content="👁️ Szczegóły" 
+                                                  Style="{StaticResource ActionButtonStyle}"
+                                                  Background="#17A2B8" 
+                                                  Foreground="White" 
+                                                  BorderBrush="#17A2B8"
+                                                  Command="{Binding DataContext.ViewOrderDetailsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{Binding}"/>
+                                            
+                                            <!-- Status change buttons -->
+                                            <Button Content="▶️ Przygotuj" 
+                                                  Command="{Binding DataContext.PrepareOrderCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{Binding}">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+                                                        <Setter Property="Background" Value="#FFC107"/>
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                        <Setter Property="BorderBrush" Value="#FFC107"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding StatusEnum}" Value="W_PRZYGOTOWANIU">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.5"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding StatusEnum}" Value="ZREALIZOWANE">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.5"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            
+                                            <Button Content="✅ Zrealizuj" 
+                                                  Command="{Binding DataContext.CompleteOrderCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{Binding}">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+                                                        <Setter Property="Background" Value="#28A745"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="BorderBrush" Value="#28A745"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding StatusEnum}" Value="PRZYJĘTE">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.5"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding StatusEnum}" Value="ZREALIZOWANE">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.5"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            
+                                            <!-- Print Buttons -->
+                                            <Button Content="🖨️ Paragon" 
+                                                  Style="{StaticResource ActionButtonStyle}"
+                                                  Background="#6F42C1" 
+                                                  Foreground="White" 
+                                                  BorderBrush="#6F42C1"
+                                                  Command="{Binding DataContext.PrintCustomerReceiptCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{Binding}"
+                                                  ToolTip="Drukuj paragon dla klienta"/>
+                                            
+                                            <Button Content="🍽️ Kuchnia" 
+                                                  Style="{StaticResource ActionButtonStyle}"
+                                                  Background="#FD7E14" 
+                                                  Foreground="White" 
+                                                  BorderBrush="#FD7E14"
+                                                  Command="{Binding DataContext.PrintKitchenOrderCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{Binding}"
+                                                  ToolTip="Drukuj zamówienie dla kuchni"/>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="2" Background="#E9ECEF" BorderBrush="#DEE2E6" BorderThickness="0,1,0,0" Padding="15,8">
+            <TextBlock Text="{Binding StatusMessage}" 
+                     FontSize="11" 
+                     Foreground="#495057"/>
+        </Border>
+    </Grid>
+</Window> 
