@@ -64,9 +64,7 @@ WpfRestaurant/
 
 ### Default Administrator
 Email: `admin@foodify.com`  
-Password: `admin123`  
-Phone: `+48 123 456 789`  
-Address: `ul. Administratorska 1, 00-001 Warszawa`
+Password: `admin123`
 
 ## Getting Started
 
